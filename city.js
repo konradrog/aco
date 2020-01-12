@@ -4,6 +4,7 @@ class City {
         this.x = x;
         this.y = y;
         this.capacity = capacity;
+        this._visited = false;
     }
 
     get xx() {
@@ -13,4 +14,12 @@ class City {
     get yy() {
         return this.y;
     }
+
+    get visited() {
+        return this._visited;
+    }
+
+    visit() {
+        this._visited = true;
+    };
 }
