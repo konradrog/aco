@@ -43,30 +43,41 @@ function createAnts() {
     }
 }
 
+function findRouteToDepo(lastCity) {
+    return routesList.filter(route => {
+        return (route.start.name == lastCity.name && route.end.name == 'Kraków')
+    })
+}
+
 
 createAnts();
 
 let first_ant = antsList[0];
 
 function findOptimalRoute(ant) {
-    let lastRoute = ant.track.pop();
+    let lastRoute = ant.track[ant.track.length - 1];
     let lastCity = lastRoute.end;
     
     possibleRoutes = routesList.filter(route => {
-    // return routesList.filter(route => {
-        if ((route.used == false) && route.start == lastCity) {
-            if (ant.leftCapacity <= route.end.capacity) {
+        if ((route.used == false) && route.start == lastCity && route.end != lastCity) {
+            if (ant.leftCapacity() >= route.end.capacity) {
                 return route;
-            } // else {
-            // wróć do depo weź kolejną mrówkę
-            //}
+            } 
         }
     });
 
-    let closestCity = possibleRoutes.reduce(
-        (a, b) => a.distance < b.distance ? a : b
-    )
-    return ant.addRoute(closestCity);
+
+    if (possibleRoutes.length != 0) {
+        let closestCity = possibleRoutes.reduce(
+            (a, b) => a.distance < b.distance ? a : b
+        )
+        ant.addRoute(closestCity);
+        return findOptimalRoute(ant);
+    } else {
+        let routeToDepo = findRouteToDepo(lastCity);
+        return ant.addRoute(routeToDepo[0]);
+    }
+    
 }
 
 findOptimalRoute(first_ant);

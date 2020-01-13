@@ -2,7 +2,7 @@ class Ant {
     constructor() {
         this._capacity = 1000;
         this._track = [];
-        this.leftCapacity =   function() {
+        this._leftCapacity =   function() {
             if (this._track.length > 0) {
                 return (this._capacity - this.track.map(
                     function(route) {
@@ -25,5 +25,9 @@ class Ant {
 
     get track() {
         return this._track;
+    }
+ 
+    get leftCapacity() {
+        return this._leftCapacity;
     }
 }
