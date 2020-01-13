@@ -1,5 +1,4 @@
-
- let citiesData = cities2.split(','); //jedno miasto za dużo, puste
+ let citiesData = cities2.split(',');
  let citiesList = new Array();
 
  function createCity(city, i) {
@@ -45,21 +44,29 @@ function createAnts() {
 }
 
 
-
 createAnts();
 
-let ant = antsList[0];
+let first_ant = antsList[0];
 
 function findOptimalRoute(ant) {
     let lastRoute = ant.track.pop();
     let lastCity = lastRoute.end;
     
-    return routesList.filter(route => {
+    possibleRoutes = routesList.filter(route => {
+    // return routesList.filter(route => {
         if ((route.used == false) && route.start == lastCity) {
-            return route
+            if (ant.leftCapacity <= route.end.capacity) {
+                return route;
+            } // else {
+            // wróć do depo weź kolejną mrówkę
+            //}
         }
     });
-    // ant.addRoute(route);
+
+    let closestCity = possibleRoutes.reduce(
+        (a, b) => a.distance < b.distance ? a : b
+    )
+    return ant.addRoute(closestCity);
 }
 
-let possibleRoutes = findOptimalRoute(ant);
+findOptimalRoute(first_ant);

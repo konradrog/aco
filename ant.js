@@ -2,6 +2,16 @@ class Ant {
     constructor() {
         this._capacity = 1000;
         this._track = [];
+        this.leftCapacity =   function() {
+            if (this._track.length > 0) {
+                return (this._capacity - this.track.map(
+                    function(route) {
+                        return route.end.capacity;
+                    }).reduce((a,b) => a + b))
+            } else {
+                return this._capacity;
+            }
+        };
     }
 
     addRoute(route) {
