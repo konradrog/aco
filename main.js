@@ -1,4 +1,4 @@
- let citiesData = cities2.split(',');
+ let citiesData = cities.split(',');
  let citiesList = new Array();
 
  function createCity(city, i) {
@@ -91,7 +91,30 @@ function findOptimalRoute(ant) {
     
 }
 
+let numberOfIteration = 2;
+let evaporationParam = 0.06;
 
-findOptimalRoute(first_ant);
-findOptimalRoute(second_ant);
+for (i = 0; i < numberOfIteration; i++) {
+    antsList.forEach (
+        function(ant) {
+            findOptimalRoute(ant);
+            ant.leavePheromones();
+    });
 
+    routesList.forEach( function (route) {
+        route.evaporatePhero(evaporationParam);
+        route.removeUsedMarker();
+    }
+)}
+
+// antsList.forEach (
+//     function(ant) {
+//         findOptimalRoute(ant);
+//         ant.leavePheromones();
+// });
+
+bestRouteLength = antsList.map(
+    function(ant) {
+        return parseInt(ant.trackLength())
+    }
+).reduce((a,b) => a + b)

@@ -3,6 +3,7 @@ class Route {
         this.start = start;
         this.end = end;
         this._used = false;
+        this._phero = 0;
     }
 
     get distance() {
@@ -19,5 +20,26 @@ class Route {
 
     use() {
         this._used = true;
+    }
+
+    get phero() {
+        return this._phero;
+    }
+
+    addPhero(amount) {
+        this._phero += amount;
+    }
+
+    evaporatePhero(evoParam) {
+        let phero = this._phero - evoParam;
+        if (phero < 0) {
+            return 0;
+        } else {
+            return phero;
+        }
+    }
+
+    removeUsedMarker() {
+        this._used = false;
     }
 }
