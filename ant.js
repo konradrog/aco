@@ -4,9 +4,9 @@ class Ant {
         this._track = [];
         this._leftCapacity =   function() {
             if (this._track.length > 0) {
-                return (this._capacity - this.track.map(
+                return (this.capacity - this.track.map(
                     function(route) {
-                        return route.end.capacity;
+                        return parseInt(route.end.capacity);
                     }).reduce((a,b) => a + b))
             } else {
                 return this._capacity;
@@ -19,7 +19,7 @@ class Ant {
         route.use();
     }
 
-    get capacity(){
+    get capacity() {
         return this._capacity;
     }
 

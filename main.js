@@ -53,25 +53,36 @@ function findRouteToDepo(lastCity) {
 createAnts();
 
 let first_ant = antsList[0];
+let second_ant = antsList[1];
+
 
 function findOptimalRoute(ant) {
     let lastRoute = ant.track[ant.track.length - 1];
     let lastCity = lastRoute.end;
     
     possibleRoutes = routesList.filter(route => {
-        if ((route.used == false) && route.start == lastCity && route.end != lastCity) {
+        // debugger;
+        if (
+                (route.used == false) && 
+                (route.start == lastCity) && 
+                (route.end != lastCity) && 
+                (route.end.visited == false) &&
+                (route.start != route.end) &&
+                (route.end.name != 'Kraków')
+            ) {
             if (ant.leftCapacity() >= route.end.capacity) {
                 return route;
             } 
         }
     });
 
-
+    // debugger;
     if (possibleRoutes.length != 0) {
-        let closestCity = possibleRoutes.reduce(
+        let shortestRoute = possibleRoutes.reduce(
             (a, b) => a.distance < b.distance ? a : b
         )
-        ant.addRoute(closestCity);
+        ant.addRoute(shortestRoute);
+        shortestRoute.end.name != 'Kraków' ? shortestRoute.end.visit() : ''
         return findOptimalRoute(ant);
     } else {
         let routeToDepo = findRouteToDepo(lastCity);
@@ -80,4 +91,7 @@ function findOptimalRoute(ant) {
     
 }
 
+
 findOptimalRoute(first_ant);
+findOptimalRoute(second_ant);
+
