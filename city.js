@@ -22,4 +22,8 @@ class City {
     visit() {
         this._visited = true;
     };
+
+    resetVisited() {
+        this._visited = false;
+    }
 }

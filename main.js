@@ -52,16 +52,42 @@ function findRouteToDepo(lastCity) {
 
 createAnts();
 
-let first_ant = antsList[0];
-let second_ant = antsList[1];
+function rand(min, max) {
+    return Math.random() * (max - min) + min;
+};
 
+
+function getRandomItem(list, weight) {
+    let total_weight = weight.reduce(function (prev, cur) {
+        return prev + cur;
+    });
+
+    let randomNum = rand(0,1);
+    let weightSum = 0;
+    let result = 0;
+
+    for (let i = 0; i < list.length; i++) {
+        weightSum += weight[i];
+        weightSum = +weightSum.toFixed(2);
+
+        if (randomNum <= weightSum) {
+            return result = list[i];
+        } else if ( (result == 0) && (i == list.length - 1)) {
+            return result = list[i]
+        }
+    }
+
+    if (result == 0) {
+        debugger;
+    }
+    return result;
+};
 
 function findOptimalRoute(ant) {
     let lastRoute = ant.track[ant.track.length - 1];
     let lastCity = lastRoute.end;
     
     possibleRoutes = routesList.filter(route => {
-        // debugger;
         if (
                 (route.used == false) && 
                 (route.start == lastCity) && 
@@ -76,11 +102,22 @@ function findOptimalRoute(ant) {
         }
     });
 
-    // debugger;
     if (possibleRoutes.length != 0) {
-        let shortestRoute = possibleRoutes.reduce(
-            (a, b) => a.distance < b.distance ? a : b
+        let propablilities = possibleRoutes.map(
+            function(route) { 
+                return route.probability 
+        });
+
+        let sumOfProbabilities = propablilities.reduce((a,b) => a + b)
+
+        let normalizedProbabilities = propablilities.map(
+            function(prob) {
+                return prob/sumOfProbabilities;
+            }
         )
+
+        let shortestRoute = getRandomItem(possibleRoutes, normalizedProbabilities)
+
         ant.addRoute(shortestRoute);
         shortestRoute.end.name != 'Kraków' ? shortestRoute.end.visit() : ''
         return findOptimalRoute(ant);
@@ -91,8 +128,9 @@ function findOptimalRoute(ant) {
     
 }
 
-let numberOfIteration = 2;
+let numberOfIteration = 10;
 let evaporationParam = 0.06;
+let bestResult = new Array;
 
 for (i = 0; i < numberOfIteration; i++) {
     antsList.forEach (
@@ -100,21 +138,23 @@ for (i = 0; i < numberOfIteration; i++) {
             findOptimalRoute(ant);
             ant.leavePheromones();
     });
+    bestRouteLength = antsList.map(
+        function(ant) {
+            return parseInt(ant.trackLength())
+        }
+    ).reduce((a,b) => a + b)
+
+    bestResult.push(bestRouteLength);
 
     routesList.forEach( function (route) {
         route.evaporatePhero(evaporationParam);
         route.removeUsedMarker();
-    }
-)}
+    })
+    antsList.forEach ( 
+        function(ant) { 
+            ant.resetTrack(depo[0]);
+    })
+}
+    
+console.log('Best Results : ' + bestResult.sort())
 
-// antsList.forEach (
-//     function(ant) {
-//         findOptimalRoute(ant);
-//         ant.leavePheromones();
-// });
-
-bestRouteLength = antsList.map(
-    function(ant) {
-        return parseInt(ant.trackLength())
-    }
-).reduce((a,b) => a + b)
