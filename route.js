@@ -11,7 +11,8 @@ class Route {
     }
 
     calculateDistance() {
-        return Math.sqrt(Math.pow((this.end.xx - this.start.xx),2) + Math.pow((this.end.yy - this.start.yy),2))
+        return distanceInKm(this.end.xx, this.start.xx, this.end.yy, this.start.yy)
+        // return Math.sqrt(Math.pow((this.end.xx - this.start.xx),2) + Math.pow((this.end.yy - this.start.yy),2))
     }
 
     get used() {

@@ -57,4 +57,12 @@ class Ant {
         this._track = [];
         return this.addRoute(route);
     }
+
+    cities() {
+        return this.track.map (
+            function(track) {
+                return track.end.name
+            }
+        )
+    }
 }

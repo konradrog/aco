@@ -128,23 +128,30 @@ function findOptimalRoute(ant) {
     
 }
 
-let numberOfIteration = 10;
+let numberOfIteration = 2000;
 let evaporationParam = 0.06;
+
 let bestResult = new Array;
+let runs = new Array;
 
 for (i = 0; i < numberOfIteration; i++) {
+    let cities = new Array;
+
     antsList.forEach (
         function(ant) {
             findOptimalRoute(ant);
             ant.leavePheromones();
     });
+
     bestRouteLength = antsList.map(
         function(ant) {
+            cities.push(ant.cities())
             return parseInt(ant.trackLength())
         }
     ).reduce((a,b) => a + b)
 
     bestResult.push(bestRouteLength);
+    runs.push([bestRouteLength, cities]);
 
     routesList.forEach( function (route) {
         route.evaporatePhero(evaporationParam);
@@ -156,5 +163,7 @@ for (i = 0; i < numberOfIteration; i++) {
     })
 }
     
-console.log('Best Results : ' + bestResult.sort())
+console.log('Best Results : ' + bestResult)
+// let result = new Result(runs[0]);
+// result.print
 
