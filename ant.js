@@ -45,7 +45,16 @@ class Ant {
         let param = this._qParam;
         let distance = this.trackLength()
         this.track.forEach( function(track) {
-            return track.addPhero( param / distance )
+            if (distance == 0) {
+                return track.addPhero(0)
+            } else {
+                return track.addPhero( param / distance )
+            }
         })
+    }
+
+    resetTrack(route) {
+        this._track = [];
+        return this.addRoute(route);
     }
 }

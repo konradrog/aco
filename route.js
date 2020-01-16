@@ -26,13 +26,25 @@ class Route {
         return this._phero;
     }
 
+    get probability() {
+        return this.calculateProbability()
+    }
+
+    calculateProbability() {
+        if (this._phero == 0) {
+            return (1/this.distance)
+        } else {
+            return (this._phero * (1/this.distance))
+        }
+    }
+
     addPhero(amount) {
         this._phero += amount;
     }
 
     evaporatePhero(evoParam) {
         let phero = this._phero - evoParam;
-        if (phero < 0) {
+        if (phero < 0 ) {
             return 0;
         } else {
             return phero;
@@ -41,5 +53,7 @@ class Route {
 
     removeUsedMarker() {
         this._used = false;
+        this.start.resetVisited();
+        this.end.resetVisited();
     }
 }
