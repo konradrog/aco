@@ -1,5 +1,9 @@
- let citiesData = cities.split(',');
- let citiesList = new Array();
+let citiesData = cities.split(',');
+let citiesList = new Array();
+
+let numberOfIteration = 1000;
+let evaporationParam = 0.06;
+let qParam = 1;
 
  function createCity(city, i) {
      rawCityData = city.split(' ');
@@ -12,7 +16,6 @@
  };
 
 citiesData.forEach(createCity);
-
 
 let routesList = new Array();
 let citiesNumber = citiesList.length
@@ -38,10 +41,12 @@ let antsList = new Array;
 
 function createAnts() {
     for (i = 0; i < antsNumber; i++) {
-        antsList[i] = new Ant();
+        antsList[i] = new Ant(qParam);
         antsList[i].addRoute(depo[0]);
     }
 }
+
+createAnts();
 
 function findRouteToDepo(lastCity) {
     return routesList.filter(route => {
@@ -49,13 +54,9 @@ function findRouteToDepo(lastCity) {
     })
 }
 
-
-createAnts();
-
 function rand(min, max) {
     return Math.random() * (max - min) + min;
 };
-
 
 function getRandomItem(list, weight) {
     let total_weight = weight.reduce(function (prev, cur) {
@@ -128,9 +129,6 @@ function findOptimalRoute(ant) {
     
 }
 
-let numberOfIteration = 2000;
-let evaporationParam = 0.06;
-
 let bestResult = new Array;
 let runs = new Array;
 
@@ -162,8 +160,8 @@ for (i = 0; i < numberOfIteration; i++) {
             ant.resetTrack(depo[0]);
     })
 }
-    
-console.log('Best Results : ' + bestResult)
-// let result = new Result(runs[0]);
-// result.print
+
+console.log("Best result:");
+console.log(runs.sort(function(a,b) {return a[0] - b[0]})[0]);
+
 

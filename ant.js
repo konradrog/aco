@@ -1,8 +1,8 @@
 class Ant {
-    constructor() {
+    constructor(qParam) {
         this._capacity = 1000;
         this._track = [];
-        this._qParam = 1;
+        this._qParam = qParam;
         this._leftCapacity =   function() {
             if (this._track.length > 0) {
                 return (this.capacity - this.track.map(
@@ -40,7 +40,6 @@ class Ant {
         return this.track.map(function(route) { return route.distance}).reduce((a,b) => a + b)
     }
 
-    // mrówka zostawia na każdej drodze między miastami Q/długość całej drogi -> od depo do depo
     leavePheromones() {
         let param = this._qParam;
         let distance = this.trackLength()
